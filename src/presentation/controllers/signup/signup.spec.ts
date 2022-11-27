@@ -1,11 +1,15 @@
 import { SignUpController } from './signup';
-import { MissingParamError, InvalidParamError, ServerError } from './../errors';
-import { IEmailValidator } from './../protocols';
 import {
+  MissingParamError,
+  InvalidParamError,
+  ServerError,
+} from '../../errors';
+import {
+  IEmailValidator,
   IAddAccount,
   IAddAccountModel,
-} from '../../domain/usecases/add-account';
-import { IAccountModel } from '../../domain/models/account';
+  IAccountModel,
+} from './signup-protocols';
 
 interface SutTypes {
   sut: SignUpController;
@@ -163,6 +167,25 @@ describe('SignUp Controller', () => {
     expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email);
   });
 
+  test('Should return 500 if EmailValidator throws', () => {
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    const httpRequest = {
+      body: {
+        name: 'name',
+        email: 'any-email@example.com',
+        password: '123',
+        passwordConfirmation: '123',
+      },
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse.body).toEqual(new ServerError());
+  });
+
   test('Should call AddAccount with correct values', () => {
     const { sut, addAccountStub } = makeSut();
     const addSpy = jest.spyOn(addAccountStub, 'add');
@@ -182,24 +205,5 @@ describe('SignUp Controller', () => {
       email: 'any-email@example.com',
       password: '123',
     });
-  });
-
-  test('Should return 500 if EmailValidator throws', () => {
-    const { sut, emailValidatorStub } = makeSut();
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
-      throw new Error();
-    });
-
-    const httpRequest = {
-      body: {
-        name: 'name',
-        email: 'any-email@example.com',
-        password: '123',
-        passwordConfirmation: '123',
-      },
-    };
-    const httpResponse = sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError());
   });
 });
