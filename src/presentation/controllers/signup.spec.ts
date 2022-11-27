@@ -1,10 +1,16 @@
 import { SignUpController } from './signup';
 import { MissingParamError, InvalidParamError, ServerError } from './../errors';
 import { IEmailValidator } from './../protocols';
+import {
+  IAddAccount,
+  IAddAccountModel,
+} from '../../domain/usecases/add-account';
+import { IAccountModel } from '../../domain/models/account';
 
 interface SutTypes {
   sut: SignUpController;
   emailValidatorStub: IEmailValidator;
+  addAccountStub: IAddAccount;
 }
 
 const makeEmailValidator = (): IEmailValidator => {
@@ -18,13 +24,32 @@ const makeEmailValidator = (): IEmailValidator => {
   return new EmailValidatorStub();
 };
 
+const makeAddAccount = (): IAddAccount => {
+  class AddAccountStub implements IAddAccount {
+    add(account: IAddAccountModel): IAccountModel {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+      };
+
+      return fakeAccount;
+    }
+  }
+
+  return new AddAccountStub();
+};
+
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
-  const sut = new SignUpController(emailValidatorStub);
+  const addAccountStub = makeAddAccount();
+  const sut = new SignUpController(emailValidatorStub, addAccountStub);
 
   return {
     sut,
     emailValidatorStub,
+    addAccountStub,
   };
 };
 
@@ -136,6 +161,27 @@ describe('SignUp Controller', () => {
     };
     sut.handle(httpRequest);
     expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email);
+  });
+
+  test('Should call AddAccount with correct values', () => {
+    const { sut, addAccountStub } = makeSut();
+    const addSpy = jest.spyOn(addAccountStub, 'add');
+
+    const httpRequest = {
+      body: {
+        name: 'name',
+        email: 'any-email@example.com',
+        password: '123',
+        passwordConfirmation: '123',
+      },
+    };
+
+    sut.handle(httpRequest);
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'name',
+      email: 'any-email@example.com',
+      password: '123',
+    });
   });
 
   test('Should return 500 if EmailValidator throws', () => {
