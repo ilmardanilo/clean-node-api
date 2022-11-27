@@ -2,13 +2,13 @@ import {
   IAddAccount,
   IAccountModel,
   IAddAccountModel,
-  Encrypter,
+  IEncrypter,
 } from './db-add-account-protocols';
 
 export class DbAddAccount implements IAddAccount {
-  private readonly encrypter: Encrypter;
+  private readonly encrypter: IEncrypter;
 
-  constructor(encrypter: Encrypter) {
+  constructor(encrypter: IEncrypter) {
     this.encrypter = encrypter;
   }
 
