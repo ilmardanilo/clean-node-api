@@ -1,13 +1,15 @@
-import { IAuthentication } from '../../../domain/usecases/authentication';
-import { InvalidParamError, MissingParamError } from '../../errors';
+import { LoginController } from './login';
 import {
   badRequest,
   serverError,
   unauthorized,
 } from '../../helpers/http-helper';
-import { IEmailValidator } from '../signup/signup-protocols';
-import { IHttpRequest } from './../../protocols/http';
-import { LoginController } from './login';
+import { InvalidParamError, MissingParamError } from '../../errors';
+import {
+  IHttpRequest,
+  IEmailValidator,
+  IAuthentication,
+} from './login-protocols';
 
 const makeAuthentication = (): IAuthentication => {
   class AuthenticationStub implements IAuthentication {
