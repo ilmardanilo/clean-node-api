@@ -87,22 +87,6 @@ const makeSut = (): SutTypes => {
 };
 
 describe('SignUp Controller', () => {
-  test('Should return 400 if password confirmation fails', async () => {
-    const { sut } = makeSut();
-    const httpRequest = {
-      body: {
-        name: 'name',
-        email: 'email@example.com',
-        password: '123',
-        passwordConfirmation: '321',
-      },
-    };
-    const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse).toEqual(
-      badRequest(new InvalidParamError('passwordConfirmation'))
-    );
-  });
-
   test('Should return 400 if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut();
     //iniciamos positivo para não influenciar nos demais testes, nesse caso que precisamos 'false' utilizamos o método do jest para alterar
