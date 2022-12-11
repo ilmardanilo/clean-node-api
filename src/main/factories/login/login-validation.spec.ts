@@ -2,7 +2,7 @@ import { makeLoginValidation } from './login-validation';
 import { EmailValidation } from '../../../presentation/helpers/validators/email-validation';
 import { ValidationComposite } from '../../../presentation/helpers/validators/validation-composite';
 import { RequeredFieldValidation } from '../../../presentation/helpers/validators/required-field-validation';
-import { IValidation } from '../../../presentation/helpers/validators/validation';
+import { IValidation } from '../../../presentation/protocols/validation';
 import { IEmailValidator } from '../../../presentation/protocols/email-validator';
 
 jest.mock('../../../presentation/helpers/validators/validation-composite');
