@@ -11,7 +11,6 @@ import {
   serverError,
   unauthorized,
 } from '../../helpers/http/http-helper';
-import { InvalidParamError, MissingParamError } from '../../errors';
 
 export class LoginController implements IController {
   private readonly authentication: IAuthentication;
@@ -31,7 +30,7 @@ export class LoginController implements IController {
 
       const { email, password } = httpRequest.body;
 
-      const accessToken = await this.authentication.auth(email, password);
+      const accessToken = await this.authentication.auth({ email, password });
       if (!accessToken) {
         return unauthorized();
       }
