@@ -1,6 +1,6 @@
 import { EmailValidation } from './../../presentation/helpers/validators/email-validation';
 import { ValidationComposite } from '../../presentation/helpers/validators/validation-composite';
-import { RiqueredFieldValidation } from '../../presentation/helpers/validators/required-field-validation';
+import { RequeredFieldValidation } from '../../presentation/helpers/validators/required-field-validation';
 import { makeSignUpValidation } from './signup-validation';
 import { IValidation } from '../../presentation/helpers/validators/validation';
 import { CompareFieldsValidation } from '../../presentation/helpers/validators/compare-fields-validation';
@@ -23,7 +23,7 @@ describe('SignUpValidation Factory', () => {
     makeSignUpValidation();
     const validations: IValidation[] = [];
     for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
-      validations.push(new RiqueredFieldValidation(field));
+      validations.push(new RequeredFieldValidation(field));
     }
     validations.push(
       new CompareFieldsValidation('password', 'passwordConfirmation')
