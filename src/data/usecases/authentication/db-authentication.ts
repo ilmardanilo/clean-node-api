@@ -5,20 +5,24 @@ import {
   IAutenticationModel,
 } from './../../../domain/usecases/authentication';
 import { ITokenGenerator } from '../../protocols/criptography/token-generator';
+import { IUpdateAccessTokenRepository } from '../../protocols/db/update-access-token-repository';
 
 export class DbAuthentication implements IAuthentication {
   private readonly loadAccountByEmailRepository: ILoadAccountByEmailRepository;
   private readonly hashComparer: IHashComparer;
   private readonly tokenGenerator: ITokenGenerator;
+  private readonly updateAccessTokenRepository: IUpdateAccessTokenRepository;
 
   constructor(
     loadAccountByEmailRepository: ILoadAccountByEmailRepository,
     hashComparer: IHashComparer,
-    tokenGenerator: ITokenGenerator
+    tokenGenerator: ITokenGenerator,
+    updateAccessTokenRepository: IUpdateAccessTokenRepository
   ) {
     this.loadAccountByEmailRepository = loadAccountByEmailRepository;
     this.hashComparer = hashComparer;
     this.tokenGenerator = tokenGenerator;
+    this.updateAccessTokenRepository = updateAccessTokenRepository;
   }
 
   async auth(authentication: IAutenticationModel): Promise<string> {
@@ -32,6 +36,7 @@ export class DbAuthentication implements IAuthentication {
       );
       if (isValid) {
         const accessToken = await this.tokenGenerator.generate(account.id);
+        await this.updateAccessTokenRepository.update(account.id, accessToken);
         return accessToken;
       }
     }
