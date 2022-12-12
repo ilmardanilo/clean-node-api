@@ -1,4 +1,4 @@
-import { ILoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
+import { ILoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository';
 import {
   IAuthentication,
   IAutenticationModel,
