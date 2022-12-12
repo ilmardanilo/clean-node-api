@@ -4,17 +4,21 @@ import {
   IAuthentication,
   IAutenticationModel,
 } from './../../../domain/usecases/authentication';
+import { ITokenGenerator } from '../../protocols/criptography/token-generator';
 
 export class DbAuthentication implements IAuthentication {
   private readonly loadAccountByEmailRepository: ILoadAccountByEmailRepository;
   private readonly hashComparer: IHashComparer;
+  private readonly tokenGenerator: ITokenGenerator;
 
   constructor(
     loadAccountByEmailRepository: ILoadAccountByEmailRepository,
-    hashComparer: IHashComparer
+    hashComparer: IHashComparer,
+    tokenGenerator: ITokenGenerator
   ) {
     this.loadAccountByEmailRepository = loadAccountByEmailRepository;
     this.hashComparer = hashComparer;
+    this.tokenGenerator = tokenGenerator;
   }
 
   async auth(authentication: IAutenticationModel): Promise<string> {
@@ -26,6 +30,7 @@ export class DbAuthentication implements IAuthentication {
         authentication.password,
         account.password
       );
+      await this.tokenGenerator.generate(account.id);
     }
     return null;
   }
