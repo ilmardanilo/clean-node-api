@@ -25,14 +25,12 @@ export class AccountMongoRepository
 
   async loadByEmail(email: string): Promise<any> {
     const accountCollection = await MongoHelper.getCollection('accounts');
-    const accountResult = await accountCollection.findOne({ email });
-    const account = {
-      id: accountResult._id.toString(),
-      ...accountResult,
-    };
+    const account = await accountCollection.findOne({ email });
 
-    delete account._id;
+    if (!account) {
+      return account;
+    }
 
-    return account;
+    return MongoHelper.map(account);
   }
 }
