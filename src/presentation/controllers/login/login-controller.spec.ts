@@ -1,4 +1,4 @@
-import { LoginController } from './login';
+import { LoginController } from './login-controller';
 import {
   badRequest,
   ok,
@@ -11,7 +11,7 @@ import {
   IAuthentication,
   IValidation,
   IAutenticationModel,
-} from './login-protocols';
+} from './login-controller-protocols';
 
 const makeAuthentication = (): IAuthentication => {
   class AuthenticationStub implements IAuthentication {

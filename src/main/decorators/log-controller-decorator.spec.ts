@@ -1,4 +1,4 @@
-import { ILogErrorRepository } from '../../data/protocols/db/log-error-repository';
+import { ILogErrorRepository } from '../../data/protocols/db/log/log-error-repository';
 import { IAccountModel } from '../../domain/models/account';
 import { serverError, ok } from '../../presentation/helpers/http/http-helper';
 import {
@@ -70,7 +70,7 @@ const makeFakeServerError = (): IHttpResponse => {
   return serverError(fakeError);
 };
 
-import { LogControllerDecorator } from './log';
+import { LogControllerDecorator } from './log-controller-decorator';
 describe('LogController Decorator', () => {
   test('Should call controller handle', async () => {
     const { sut, controllerStub } = makeSut();
