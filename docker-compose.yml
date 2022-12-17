@@ -13,8 +13,10 @@ services:
     build: .
     image: clean-node-api #como fiz build essa image diz respeito ao nome da tag
     restart: always
-    command: npm start #opcional, caso use aqui remove no dockerfile
+    command: npm debug #opcional, caso use aqui remove no dockerfile
     volumes: #substitui o COPY, pois o mesmo guarda cache e pode não atualizar o /dist
       - ./dist:/usr/src/clean-node-api/dist
+      - ./package.json:/usr/src/clean-node-api/package.json
     ports: #como é build, no dockerfile pode tirar o EXPOSE
       - '3333:3333'
+      - '9222:9222'
