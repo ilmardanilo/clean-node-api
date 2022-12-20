@@ -8,6 +8,13 @@ export const badRequest = (error: Error): IHttpResponse => {
   };
 };
 
+export const forbidden = (error: Error): IHttpResponse => {
+  return {
+    statusCode: 403,
+    body: error,
+  };
+};
+
 export const serverError = (error: Error): IHttpResponse => {
   return {
     statusCode: 500,
