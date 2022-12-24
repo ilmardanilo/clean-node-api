@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { IAddAccountRepository } from '../../../../data/protocols/db/account/add-account-repository';
 import { IAddAccountModel } from '../../../../domain/usecases/add-account';
