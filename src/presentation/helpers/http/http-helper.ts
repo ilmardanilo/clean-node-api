@@ -35,3 +35,10 @@ export const ok = (data: any): IHttpResponse => {
     body: data,
   };
 };
+
+export const noContent = (): IHttpResponse => {
+  return {
+    statusCode: 204,
+    body: null,
+  };
+};
