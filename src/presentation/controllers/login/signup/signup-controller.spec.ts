@@ -1,6 +1,10 @@
-import { forbidden } from './../../helpers/http/http-helper';
+import { forbidden } from './../../../helpers/http/http-helper';
 import { SignUpController } from './signup-controller';
-import { EmailInUseError, MissingParamError, ServerError } from '../../errors';
+import {
+  EmailInUseError,
+  MissingParamError,
+  ServerError,
+} from '../../../errors';
 import {
   IAddAccount,
   IAddAccountModel,
@@ -10,7 +14,7 @@ import {
   IAuthentication,
   IAutenticationModel,
 } from './signup-controller-protocols';
-import { ok, badRequest, serverError } from '../../helpers/http/http-helper';
+import { ok, badRequest, serverError } from '../../../helpers/http/http-helper';
 
 interface SutTypes {
   sut: SignUpController;
