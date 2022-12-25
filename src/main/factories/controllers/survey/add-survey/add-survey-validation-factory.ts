@@ -1,8 +1,8 @@
 import {
   ValidationComposite,
   RequeredFieldValidation,
-} from '../../../../validation/validators';
-import { IValidation } from '../../../../presentation/protocols';
+} from '../../../../../validation/validators';
+import { IValidation } from '../../../../../presentation/protocols';
 
 export const makeAddSurveyValidation = (): ValidationComposite => {
   const validations: IValidation[] = [];
