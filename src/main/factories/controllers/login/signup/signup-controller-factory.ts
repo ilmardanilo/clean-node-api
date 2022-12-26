@@ -1,5 +1,5 @@
 import { makeLogControllerDecorator } from '../../../decorators/log-controller-decorator-factory';
-import { makeDbAddAccount } from '../../../usecases/account/db-account/db-add-account-factory';
+import { makeDbAddAccount } from '../../../usecases/account/add-account/db-add-account-factory';
 import { SignUpController } from '../../../../../presentation/controllers/login/signup/signup-controller';
 import { IController } from '../../../../../presentation/protocols';
 import { makeSignUpValidation } from './signup-validation-factory';
