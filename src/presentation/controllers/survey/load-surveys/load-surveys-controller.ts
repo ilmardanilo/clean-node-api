@@ -1,4 +1,4 @@
-import { ok } from '../../../helpers/http/http-helper';
+import { ok, serverError } from '../../../helpers/http/http-helper';
 import {
   IController,
   IHttpRequest,
@@ -8,8 +8,13 @@ import {
 
 export class LoadSurveysController implements IController {
   constructor(private readonly loadSurveys: ILoadSurveys) {}
+
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    const surveys = await this.loadSurveys.load();
-    return ok(surveys);
+    try {
+      const surveys = await this.loadSurveys.load();
+      return ok(surveys);
+    } catch (error) {
+      return serverError(error);
+    }
   }
 }
