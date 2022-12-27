@@ -9,6 +9,28 @@ import env from '../config/env';
 let surveyCollection: Collection;
 let accountCollection: Collection;
 
+const makeAccessToken = async (): Promise<string> => {
+  const password = await hash('123', 12);
+  const { insertedId } = await accountCollection.insertOne({
+    name: 'Ilmar',
+    email: 'ilmar@mail.com',
+    password,
+    role: 'admin',
+  });
+  const id = insertedId.toString();
+  const accessToken = sign(id, env.jwtSecret);
+  await accountCollection.updateOne(
+    { _id: insertedId },
+    {
+      $set: {
+        accessToken,
+      },
+    }
+  );
+
+  return accessToken;
+};
+
 describe('Survey Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
@@ -45,23 +67,7 @@ describe('Survey Routes', () => {
     });
 
     test('Should return 204 on add survey with valid accessToken', async () => {
-      const password = await hash('123', 12);
-      const { insertedId } = await accountCollection.insertOne({
-        name: 'Ilmar',
-        email: 'ilmar@mail.com',
-        password,
-        role: 'admin',
-      });
-      const id = insertedId.toString();
-      const accessToken = sign(id, env.jwtSecret);
-      await accountCollection.updateOne(
-        { _id: insertedId },
-        {
-          $set: {
-            accessToken,
-          },
-        }
-      );
+      const accessToken = await makeAccessToken();
       await request(app)
         .post('/api/surveys')
         .set('x-access-token', accessToken)
@@ -87,22 +93,7 @@ describe('Survey Routes', () => {
     });
 
     test('Should return 200 on load surveys with valid accessToken', async () => {
-      const password = await hash('123', 12);
-      const { insertedId } = await accountCollection.insertOne({
-        name: 'Ilmar',
-        email: 'ilmar@mail.com',
-        password,
-      });
-      const id = insertedId.toString();
-      const accessToken = sign(id, env.jwtSecret);
-      await accountCollection.updateOne(
-        { _id: insertedId },
-        {
-          $set: {
-            accessToken,
-          },
-        }
-      );
+      const accessToken = await makeAccessToken();
 
       await surveyCollection.insertMany([
         {
