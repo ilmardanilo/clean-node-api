@@ -7,23 +7,23 @@ import {
 } from '../../../errors';
 import {
   IAddAccount,
-  IAddAccountModel,
-  IAccountModel,
-  IHttpRequest,
+  AddAccountModel,
+  AccountModel,
+  HttpRequest,
   IValidation,
   IAuthentication,
-  IAutenticationModel,
+  AutenticationModel,
 } from './signup-controller-protocols';
 import { ok, badRequest, serverError } from '../../../helpers/http/http-helper';
 
-interface SutTypes {
+type SutTypes = {
   sut: SignUpController;
   addAccountStub: IAddAccount;
   validationStub: IValidation;
   authenticationStub: IAuthentication;
-}
+};
 
-const makeFakeRequest = (): IHttpRequest => ({
+const makeFakeRequest = (): HttpRequest => ({
   body: {
     name: 'name',
     email: 'any-email@example.com',
@@ -32,7 +32,7 @@ const makeFakeRequest = (): IHttpRequest => ({
   },
 });
 
-const makeFakeAccount = (): IAccountModel => ({
+const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid_email@mail.com',
@@ -41,7 +41,7 @@ const makeFakeAccount = (): IAccountModel => ({
 
 const makeAddAccount = (): IAddAccount => {
   class AddAccountStub implements IAddAccount {
-    async add(account: IAddAccountModel): Promise<IAccountModel> {
+    async add(account: AddAccountModel): Promise<AccountModel> {
       return new Promise((resolve) => resolve(makeFakeAccount()));
     }
   }
@@ -61,7 +61,7 @@ const makeValidation = (): IValidation => {
 
 const makeAuthentication = (): IAuthentication => {
   class AuthenticationStub implements IAuthentication {
-    async auth(authentication: IAutenticationModel): Promise<string> {
+    async auth(authentication: AutenticationModel): Promise<string> {
       return 'any_token';
     }
   }

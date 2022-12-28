@@ -1,20 +1,20 @@
 import { AuthMiddleware } from './auth-middleware';
 import {
   ILoadAccountByToken,
-  IHttpRequest,
-  IAccountModel,
+  HttpRequest,
+  AccountModel,
 } from './auth-middleware-protocols';
 import { AccessDeniedError } from '../errors';
 import { forbidden, ok, serverError } from '../helpers/http/http-helper';
 
-const makeFakeAccount = (): IAccountModel => ({
+const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid_email@mail.com',
   password: 'hashed_password',
 });
 
-const makeFakeRequest = (): IHttpRequest => ({
+const makeFakeRequest = (): HttpRequest => ({
   headers: {
     'x-access-token': 'any_token',
   },
@@ -22,17 +22,17 @@ const makeFakeRequest = (): IHttpRequest => ({
 
 const makeLoadAccountByToken = (): ILoadAccountByToken => {
   class LoadAccountByTokenStub implements ILoadAccountByToken {
-    async load(accessToken: string, role?: string): Promise<IAccountModel> {
+    async load(accessToken: string, role?: string): Promise<AccountModel> {
       return new Promise((resolve) => resolve(makeFakeAccount()));
     }
   }
   return new LoadAccountByTokenStub();
 };
 
-interface SutTypes {
+type SutTypes = {
   sut: AuthMiddleware;
   loadAccountByTokenStub: ILoadAccountByToken;
-}
+};
 
 const makeSut = (role?: string): SutTypes => {
   const loadAccountByTokenStub = makeLoadAccountByToken();

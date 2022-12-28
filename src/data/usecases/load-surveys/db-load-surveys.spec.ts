@@ -1,9 +1,9 @@
 import { DbLoadSurveys } from './db-load-surveys';
-import { ISurveyModel } from '../../../domain/models/survey';
+import { SurveyModel } from '../../../domain/models/survey';
 import { ILoadSurveysRepository } from '../../protocols/db/survey/load-surveys-repository';
 import MockDate from 'mockdate';
 
-const makeFakeSurveys = (): ISurveyModel[] => {
+const makeFakeSurveys = (): SurveyModel[] => {
   return [
     {
       id: 'any_id',
@@ -30,10 +30,10 @@ const makeFakeSurveys = (): ISurveyModel[] => {
   ];
 };
 
-interface SutTypes {
+type SutTypes = {
   sut: DbLoadSurveys;
   loadSurveysRepositoryStub: ILoadSurveysRepository;
-}
+};
 
 const makeSut = (): SutTypes => {
   const loadSurveysRepositoryStub = makeLoadSurveysRepository();
@@ -46,7 +46,7 @@ const makeSut = (): SutTypes => {
 
 const makeLoadSurveysRepository = (): ILoadSurveysRepository => {
   class LoadSurveysRepositoryStub implements ILoadSurveysRepository {
-    async loadAll(): Promise<ISurveyModel[]> {
+    async loadAll(): Promise<SurveyModel[]> {
       return new Promise((resolve) => resolve(makeFakeSurveys()));
     }
   }

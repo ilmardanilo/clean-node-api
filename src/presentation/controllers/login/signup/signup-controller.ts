@@ -1,6 +1,6 @@
 import {
-  IHttpRequest,
-  IHttpResponse,
+  HttpRequest,
+  HttpResponse,
   IController,
   IAddAccount,
   IValidation,
@@ -21,7 +21,7 @@ export class SignUpController implements IController {
     private readonly authentication: IAuthentication
   ) {}
 
-  async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(httpRequest.body);
       if (error) {

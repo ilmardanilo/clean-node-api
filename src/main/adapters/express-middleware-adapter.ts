@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { IMiddleware, IHttpRequest } from '../../presentation/protocols';
+import { IMiddleware, HttpRequest } from '../../presentation/protocols';
 
 export const adaptMiddleware = (middleware: IMiddleware) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const httpRequest: IHttpRequest = {
+    const httpRequest: HttpRequest = {
       headers: req.headers,
     };
 

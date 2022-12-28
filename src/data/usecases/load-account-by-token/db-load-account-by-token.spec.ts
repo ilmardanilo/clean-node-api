@@ -1,13 +1,13 @@
 import { ILoadAccountByTokenRepository } from './../../protocols/db/account/load-account-by-token-repository';
-import { IAccountModel } from '../add-account/db-add-account-protocols';
+import { AccountModel } from '../add-account/db-add-account-protocols';
 import { DbLoadAccountByToken } from './db-load-account-by-token';
 import { IDecrypter } from './db-load-account-by-token-protocols';
 
-interface SutTypes {
+type SutTypes = {
   sut: DbLoadAccountByToken;
   decrypterStub: IDecrypter;
   loadAccountByTokenRepositoryStub: ILoadAccountByTokenRepository;
-}
+};
 
 const makeSut = (): SutTypes => {
   const decrypterStub = makeDecrypter();
@@ -39,14 +39,14 @@ const makeLoadAccountByTokenRepository = (): ILoadAccountByTokenRepository => {
     async loadByToken(
       accessToken: string,
       role?: string
-    ): Promise<IAccountModel> {
+    ): Promise<AccountModel> {
       return new Promise((resolve) => resolve(makeFakeAccount()));
     }
   }
   return new LoadAccountByTokenRepositoryStub();
 };
 
-const makeFakeAccount = (): IAccountModel => ({
+const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',
   name: 'any_name',
   email: 'any_email@mail.com',

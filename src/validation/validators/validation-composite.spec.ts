@@ -2,10 +2,10 @@ import { ValidationComposite } from './validation-composite';
 import { MissingParamError } from '../../presentation/errors';
 import { IValidation } from '../../presentation/protocols';
 
-interface SutTypes {
+type SutTypes = {
   sut: ValidationComposite;
   validationStubs: IValidation[];
-}
+};
 
 const makeValidation = (): IValidation => {
   class ValidationStub implements IValidation {

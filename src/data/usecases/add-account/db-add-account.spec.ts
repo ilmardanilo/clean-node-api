@@ -1,18 +1,18 @@
 import {
-  IAccountModel,
+  AccountModel,
   IHasher,
-  IAddAccountModel,
+  AddAccountModel,
   IAddAccountRepository,
   ILoadAccountByEmailRepository,
 } from './db-add-account-protocols';
 import { DbAddAccount } from './db-add-account';
 
-interface SutTypes {
+type SutTypes = {
   sut: DbAddAccount;
   hasherStub: IHasher;
   addAccountRepositoryStub: IAddAccountRepository;
   loadAccountByEmailRepositoryStub: ILoadAccountByEmailRepository;
-}
+};
 
 const makeHasher = (): IHasher => {
   class HasherStub implements IHasher {
@@ -25,7 +25,7 @@ const makeHasher = (): IHasher => {
 
 const makeAddAccountRepository = (): IAddAccountRepository => {
   class AddAccountRepositoryStub implements IAddAccountRepository {
-    async add(account: IAddAccountModel): Promise<IAccountModel> {
+    async add(account: AddAccountModel): Promise<AccountModel> {
       return new Promise((resolve) => resolve(makeFakeAccount()));
     }
   }
@@ -37,7 +37,7 @@ const makeLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub
     implements ILoadAccountByEmailRepository
   {
-    async loadByEmail(email: string): Promise<IAccountModel> {
+    async loadByEmail(email: string): Promise<AccountModel> {
       return new Promise((resolve) => resolve(null));
     }
   }
@@ -62,14 +62,14 @@ const makeSut = (): SutTypes => {
   };
 };
 
-const makeFakeAccount = (): IAccountModel => ({
+const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid_email@mail.com',
   password: 'hashed_password',
 });
 
-const makeFakeAccountData = (): IAddAccountModel => ({
+const makeFakeAccountData = (): AddAccountModel => ({
   name: 'valid_name',
   email: 'valid_email@mail.com',
   password: 'valid_password',

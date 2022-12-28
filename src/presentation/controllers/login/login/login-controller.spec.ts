@@ -7,15 +7,15 @@ import {
 } from '../../../helpers/http/http-helper';
 import { MissingParamError } from '../../../errors';
 import {
-  IHttpRequest,
+  HttpRequest,
   IAuthentication,
   IValidation,
-  IAutenticationModel,
+  AutenticationModel,
 } from './login-controller-protocols';
 
 const makeAuthentication = (): IAuthentication => {
   class AuthenticationStub implements IAuthentication {
-    async auth(authentication: IAutenticationModel): Promise<string> {
+    async auth(authentication: AutenticationModel): Promise<string> {
       return 'any_token';
     }
   }
@@ -33,20 +33,20 @@ const makeValidation = (): IValidation => {
   return new ValidationStub();
 };
 
-interface ISutTypes {
+type SutTypes = {
   sut: LoginController;
   authenticationStub: IAuthentication;
   validationStub: IValidation;
-}
+};
 
-const makeFakeRequest = (): IHttpRequest => ({
+const makeFakeRequest = (): HttpRequest => ({
   body: {
     email: 'any_email@mail.com',
     password: 'any_password',
   },
 });
 
-const makeSut = (): ISutTypes => {
+const makeSut = (): SutTypes => {
   const validationStub = makeValidation();
   const authenticationStub = makeAuthentication();
   const sut = new LoginController(authenticationStub, validationStub);
