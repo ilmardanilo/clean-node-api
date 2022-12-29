@@ -64,6 +64,13 @@ describe('DbSaveSurveyResult Usecase', () => {
     expect(saveSpy).toHaveBeenCalledWith(surveyResultData);
   });
 
+  test('Should return survey result on success', async () => {
+    const { sut } = makeSut();
+    const surveyResult = await sut.save(makeFakeSaveSurveyResultData());
+
+    expect(surveyResult).toEqual(makeFakeSurveyResult());
+  });
+
   test('Should throw if SaveSurveyResultRepository throws', async () => {
     const { sut, saveSurveyResultRepositoryStub } = makeSut();
     jest
