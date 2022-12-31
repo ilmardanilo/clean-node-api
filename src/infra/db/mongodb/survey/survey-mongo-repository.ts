@@ -1,9 +1,9 @@
 import { ILoadSurveysRepository } from './../../../../data/protocols/db/survey/load-surveys-repository';
 import { IAddSurveyRepository } from './../../../../data/protocols/db/survey/add-survey-repository';
-import { AddSurveyModel } from '../../../../domain/usecases/add-survey';
+import { AddSurveyModel } from '../../../../domain/usecases/survey/add-survey';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { SurveyModel } from '../../../../domain/models/survey';
-import { ILoadSurveyByIdRepository } from '../../../../data/usecases/load-survey-by-id/db-load-survey-by-id-protocols';
+import { ILoadSurveyByIdRepository } from '../../../../data/usecases/survey/load-survey-by-id/db-load-survey-by-id-protocols';
 import { ObjectId } from 'mongodb';
 
 export class SurveyMongoRepository

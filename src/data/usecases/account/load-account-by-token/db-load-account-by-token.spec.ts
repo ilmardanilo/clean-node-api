@@ -1,4 +1,4 @@
-import { ILoadAccountByTokenRepository } from './../../protocols/db/account/load-account-by-token-repository';
+import { ILoadAccountByTokenRepository } from '../../../protocols/db/account/load-account-by-token-repository';
 import { AccountModel } from '../add-account/db-add-account-protocols';
 import { DbLoadAccountByToken } from './db-load-account-by-token';
 import { IDecrypter } from './db-load-account-by-token-protocols';

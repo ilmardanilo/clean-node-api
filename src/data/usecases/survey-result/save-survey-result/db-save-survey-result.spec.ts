@@ -1,5 +1,5 @@
+import { ISaveSurveyResultRepository } from '../../../protocols/db/survey-result/save-survey-result-repository';
 import {
-  ISaveSurveyResultRepository,
   SaveSurveyResultModel,
   SurveyResultModel,
 } from './db-save-survey-result-protocols';
