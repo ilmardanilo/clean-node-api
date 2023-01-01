@@ -7,12 +7,12 @@ import {
 } from '../../../errors';
 import {
   IAddAccount,
-  AddAccountModel,
+  AddAccountParams,
   AccountModel,
   HttpRequest,
   IValidation,
   IAuthentication,
-  AutenticationModel,
+  AuthenticationParams,
 } from './signup-controller-protocols';
 import { ok, badRequest, serverError } from '../../../helpers/http/http-helper';
 
@@ -41,7 +41,7 @@ const makeFakeAccount = (): AccountModel => ({
 
 const makeAddAccount = (): IAddAccount => {
   class AddAccountStub implements IAddAccount {
-    async add(account: AddAccountModel): Promise<AccountModel> {
+    async add(account: AddAccountParams): Promise<AccountModel> {
       return new Promise((resolve) => resolve(makeFakeAccount()));
     }
   }
@@ -61,7 +61,7 @@ const makeValidation = (): IValidation => {
 
 const makeAuthentication = (): IAuthentication => {
   class AuthenticationStub implements IAuthentication {
-    async auth(authentication: AutenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationParams): Promise<string> {
       return 'any_token';
     }
   }

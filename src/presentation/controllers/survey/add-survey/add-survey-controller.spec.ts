@@ -7,7 +7,7 @@ import {
 import { AddSurveyController } from './add-survey-controller';
 import {
   IAddSurvey,
-  AddSurveyModel,
+  AddSurveyParams,
   HttpRequest,
   IValidation,
 } from './add-survey-controller-protocols';
@@ -28,7 +28,7 @@ const makeFakeRequest = (): HttpRequest => ({
 
 const makeAddSurvey = (): IAddSurvey => {
   class AddSurveyStub implements IAddSurvey {
-    async add(data: AddSurveyModel): Promise<void> {
+    async add(data: AddSurveyParams): Promise<void> {
       return new Promise((resolve) => resolve());
     }
   }

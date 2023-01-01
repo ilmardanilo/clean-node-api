@@ -1,6 +1,6 @@
 import {
   ISaveSurveyResult,
-  SaveSurveyResultModel,
+  SaveSurveyResultParams,
 } from './../../../../domain/usecases/survey-result/save-survey-result';
 import { SurveyModel } from '../../../../domain/models/survey';
 import { InvalidParamError } from '../../../errors';
@@ -53,7 +53,7 @@ const makeLoadSurveyById = (): ILoadSurveyById => {
 
 const makeSaveSurveyResult = (): ISaveSurveyResult => {
   class SaveSurveyResultStub implements ISaveSurveyResult {
-    async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+    async save(data: SaveSurveyResultParams): Promise<SurveyResultModel> {
       return new Promise((resolve) => resolve(makeFakeSurveyResult()));
     }
   }

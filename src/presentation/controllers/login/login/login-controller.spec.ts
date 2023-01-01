@@ -10,12 +10,12 @@ import {
   HttpRequest,
   IAuthentication,
   IValidation,
-  AutenticationModel,
+  AuthenticationParams,
 } from './login-controller-protocols';
 
 const makeAuthentication = (): IAuthentication => {
   class AuthenticationStub implements IAuthentication {
-    async auth(authentication: AutenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationParams): Promise<string> {
       return 'any_token';
     }
   }

@@ -1,6 +1,6 @@
 import { ISaveSurveyResultRepository } from '../../../../data/protocols/db/survey-result/save-survey-result-repository';
 import {
-  SaveSurveyResultModel,
+  SaveSurveyResultParams,
   SurveyResultModel,
 } from '../../../../data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols';
 import { MongoHelper } from '../helpers/mongo-helper';
@@ -8,7 +8,7 @@ import { MongoHelper } from '../helpers/mongo-helper';
 export class SurveyResultMongoRepository
   implements ISaveSurveyResultRepository
 {
-  async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+  async save(data: SaveSurveyResultParams): Promise<SurveyResultModel> {
     const surveyResultCollection = await MongoHelper.getCollection(
       'surveyResults'
     );
