@@ -49,7 +49,7 @@ const makeSut = (): SutTypes => {
 const mockLoadSurveysRepository = (): ILoadSurveysRepository => {
   class LoadSurveysRepositoryStub implements ILoadSurveysRepository {
     async loadAll(): Promise<SurveyModel[]> {
-      return new Promise((resolve) => resolve(mockFakeSurveysModel()));
+      return Promise.resolve(mockFakeSurveysModel());
     }
   }
   return new LoadSurveysRepositoryStub();

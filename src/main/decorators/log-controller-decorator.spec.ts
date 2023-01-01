@@ -16,7 +16,7 @@ type SutTypes = {
 const mockController = (): IController => {
   class ControllerStub implements IController {
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-      return new Promise((resolve) => resolve(ok(mockAccountModel())));
+      return Promise.resolve(ok(mockAccountModel()));
     }
   }
 
@@ -26,7 +26,7 @@ const mockController = (): IController => {
 const mocklogErrorRepository = (): ILogErrorRepository => {
   class LogErrorRepositoryStub implements ILogErrorRepository {
     async logError(stack: string): Promise<void> {
-      return new Promise((resolve) => resolve());
+      return Promise.resolve();
     }
   }
 
@@ -87,9 +87,7 @@ describe('LogController Decorator', () => {
     const logErrorSpy = jest.spyOn(logErrorRepositoryStub, 'logError');
     jest
       .spyOn(controllerStub, 'handle')
-      .mockReturnValueOnce(
-        new Promise((resolve) => resolve(mockServerError()))
-      );
+      .mockReturnValueOnce(Promise.resolve(mockServerError()));
 
     await sut.handle(mockRequest());
 

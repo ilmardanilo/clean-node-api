@@ -19,7 +19,7 @@ const mockSurveyParams = (): AddSurveyParams => ({
 const mockAddSurveyRepository = (): IAddSurveyRepository => {
   class AddSurveyRepositoryStub implements IAddSurveyRepository {
     async add(surveyData: AddSurveyParams): Promise<void> {
-      return new Promise((resolve) => resolve());
+      return Promise.resolve();
     }
   }
 

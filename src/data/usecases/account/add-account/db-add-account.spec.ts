@@ -21,7 +21,7 @@ type SutTypes = {
 const mockHasher = (): IHasher => {
   class HasherStub implements IHasher {
     async hash(value: string): Promise<string> {
-      return new Promise((resolve) => resolve('hashed_password'));
+      return Promise.resolve('hashed_password');
     }
   }
   return new HasherStub();
@@ -30,7 +30,7 @@ const mockHasher = (): IHasher => {
 const mockAddAccountRepository = (): IAddAccountRepository => {
   class AddAccountRepositoryStub implements IAddAccountRepository {
     async add(account: AddAccountParams): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(mockAccountModel()));
+      return Promise.resolve(mockAccountModel());
     }
   }
 
@@ -42,7 +42,7 @@ const mockLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
     implements ILoadAccountByEmailRepository
   {
     async loadByEmail(email: string): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(null));
+      return Promise.resolve(null);
     }
   }
   return new LoadAccountByEmailRepositoryStub();
@@ -116,9 +116,7 @@ describe('DbAddAccount Usecase', () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     jest
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
-      .mockReturnValueOnce(
-        new Promise((resolve) => resolve(mockAccountModel()))
-      );
+      .mockReturnValueOnce(Promise.resolve(mockAccountModel()));
 
     const account = await sut.add(mockAddAccountParams());
     expect(account).toBeNull();

@@ -48,7 +48,7 @@ const makeSut = (): SutTypes => {
 const mockLoadSurveys = (): ILoadSurveys => {
   class LoadSurveysStub implements ILoadSurveys {
     async load(): Promise<SurveyModel[]> {
-      return new Promise((resolve) => resolve(mockSurveysModel()));
+      return Promise.resolve(mockSurveysModel());
     }
   }
   return new LoadSurveysStub();
@@ -80,7 +80,7 @@ describe('LoadSurveys Controller', () => {
     const { sut, loadSurveysStub } = makeSut();
     jest
       .spyOn(loadSurveysStub, 'load')
-      .mockReturnValueOnce(new Promise((resolve) => resolve([])));
+      .mockReturnValueOnce(Promise.resolve([]));
     const httpResponse = await sut.handle({});
     expect(httpResponse).toEqual(noContent());
   });

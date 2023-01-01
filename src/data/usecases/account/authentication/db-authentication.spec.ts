@@ -19,7 +19,7 @@ const mockLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
     implements ILoadAccountByEmailRepository
   {
     async loadByEmail(email: string): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(mockAccountModel()));
+      return Promise.resolve(mockAccountModel());
     }
   }
   return new LoadAccountByEmailRepositoryStub();
@@ -28,7 +28,7 @@ const mockLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
 const mockHashComparer = (): IHashComparer => {
   class HashComparerStub implements IHashComparer {
     async compare(value: string, hash: string): Promise<boolean> {
-      return new Promise((resolve) => resolve(true));
+      return Promise.resolve(true);
     }
   }
   return new HashComparerStub();
@@ -37,7 +37,7 @@ const mockHashComparer = (): IHashComparer => {
 const mockEncrypter = (): IEncrypter => {
   class EncrypterStub implements IEncrypter {
     async encrypt(value: string): Promise<string> {
-      return new Promise((resolve) => resolve('any_token'));
+      return Promise.resolve('any_token');
     }
   }
   return new EncrypterStub();
@@ -48,7 +48,7 @@ const mockUpdateAccessTokenRepository = (): IUpdateAccessTokenRepository => {
     implements IUpdateAccessTokenRepository
   {
     async updateAccessToken(id: string, token: string): Promise<void> {
-      return new Promise((resolve) => resolve());
+      return Promise.resolve();
     }
   }
   return new UpdateAccessTokenRepositoryStub();
@@ -131,7 +131,7 @@ describe('DbAuthentication UseCase', () => {
     const { sut, hashComparerStub } = makeSut();
     jest
       .spyOn(hashComparerStub, 'compare')
-      .mockReturnValueOnce(new Promise((resolve) => resolve(false)));
+      .mockReturnValueOnce(Promise.resolve(false));
     const accessToken = await sut.auth(mockAuthenticationParams());
     expect(accessToken).toBeNull();
   });

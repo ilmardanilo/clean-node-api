@@ -44,7 +44,7 @@ const mockSurveyResultModel = (): SurveyResultModel => ({
 const mockLoadSurveyById = (): ILoadSurveyById => {
   class LoadSurveyByIdStub implements ILoadSurveyById {
     async loadById(id: string): Promise<SurveyModel> {
-      return new Promise((resolve) => resolve(mockSurveyModel()));
+      return Promise.resolve(mockSurveyModel());
     }
   }
 
@@ -54,7 +54,7 @@ const mockLoadSurveyById = (): ILoadSurveyById => {
 const mockSaveSurveyResult = (): ISaveSurveyResult => {
   class SaveSurveyResultStub implements ISaveSurveyResult {
     async save(data: SaveSurveyResultParams): Promise<SurveyResultModel> {
-      return new Promise((resolve) => resolve(mockSurveyResultModel()));
+      return Promise.resolve(mockSurveyResultModel());
     }
   }
 
@@ -102,7 +102,7 @@ describe('SaveSurveyResult Controller', () => {
     const { sut, loadSurveyByIdStub } = makeSut();
     jest
       .spyOn(loadSurveyByIdStub, 'loadById')
-      .mockReturnValueOnce(new Promise((resolve) => resolve(null)));
+      .mockReturnValueOnce(Promise.resolve(null));
     const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
   });

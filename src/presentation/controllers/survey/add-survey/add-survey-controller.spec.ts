@@ -29,7 +29,7 @@ const mockRequest = (): HttpRequest => ({
 const mockAddSurvey = (): IAddSurvey => {
   class AddSurveyStub implements IAddSurvey {
     async add(data: AddSurveyParams): Promise<void> {
-      return new Promise((resolve) => resolve());
+      return Promise.resolve();
     }
   }
 

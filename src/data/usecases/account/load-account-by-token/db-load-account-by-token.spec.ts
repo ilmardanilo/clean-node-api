@@ -27,7 +27,7 @@ const makeSut = (): SutTypes => {
 const mockDecrypter = (): IDecrypter => {
   class DecrypterStub implements IDecrypter {
     async decrypt(value: string): Promise<string> {
-      return new Promise((resolve) => resolve('any_value'));
+      return Promise.resolve('any_value');
     }
   }
   return new DecrypterStub();
@@ -41,7 +41,7 @@ const mockLoadAccountByTokenRepository = (): ILoadAccountByTokenRepository => {
       accessToken: string,
       role?: string
     ): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(mockAccountModel()));
+      return Promise.resolve(mockAccountModel());
     }
   }
   return new LoadAccountByTokenRepositoryStub();
@@ -59,7 +59,7 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { sut, decrypterStub } = makeSut();
     jest
       .spyOn(decrypterStub, 'decrypt')
-      .mockReturnValueOnce(new Promise((resolve) => resolve(null)));
+      .mockReturnValueOnce(Promise.resolve(null));
     const account = await sut.load('any_token', 'any_role');
     expect(account).toBeNull();
   });
@@ -78,7 +78,7 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut();
     jest
       .spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
-      .mockReturnValueOnce(new Promise((resolve) => resolve(null)));
+      .mockReturnValueOnce(Promise.resolve(null));
     const account = await sut.load('any_token', 'any_role');
     expect(account).toBeNull();
   });

@@ -3,10 +3,10 @@ import { BcryptAdapter } from './bcrypt-adapter';
 
 jest.mock('bcrypt', () => ({
   async hash(): Promise<string> {
-    return new Promise((resolve) => resolve('hash'));
+    return Promise.resolve('hash');
   },
   async compare(): Promise<boolean> {
-    return new Promise((resolve) => resolve(true));
+    return Promise.resolve(true);
   },
 }));
 
@@ -34,9 +34,7 @@ describe('Bcrypt Adapter', () => {
       const sut = makeSut();
       jest
         .spyOn(bcrypt, 'hash')
-        .mockImplementation(
-          () => new Promise((resolve, reject) => reject(new Error()))
-        );
+        .mockImplementation(() => Promise.reject(new Error()));
       const promise = sut.hash('any_value');
       await expect(promise).rejects.toThrow();
     });
@@ -67,9 +65,7 @@ describe('Bcrypt Adapter', () => {
       const sut = makeSut();
       jest
         .spyOn(bcrypt, 'compare')
-        .mockImplementation(
-          () => new Promise((resolve, reject) => reject(new Error()))
-        );
+        .mockImplementation(() => Promise.reject(new Error()));
       const promise = sut.compare('any_value', 'any_hash');
       await expect(promise).rejects.toThrow();
     });
