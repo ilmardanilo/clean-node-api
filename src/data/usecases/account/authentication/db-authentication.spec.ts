@@ -9,12 +9,12 @@ import {
   IUpdateAccessTokenRepository,
 } from './db-authentication-protocols';
 
-const makeFakeAuthentication = (): AuthenticationParams => ({
+const mockAuthenticationParams = (): AuthenticationParams => ({
   email: 'any_email@mail.com',
   password: 'any_password',
 });
 
-const makeLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
+const mockLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub
     implements ILoadAccountByEmailRepository
   {
@@ -25,7 +25,7 @@ const makeLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
   return new LoadAccountByEmailRepositoryStub();
 };
 
-const makeHashComparer = (): IHashComparer => {
+const mockHashComparer = (): IHashComparer => {
   class HashComparerStub implements IHashComparer {
     async compare(value: string, hash: string): Promise<boolean> {
       return new Promise((resolve) => resolve(true));
@@ -34,7 +34,7 @@ const makeHashComparer = (): IHashComparer => {
   return new HashComparerStub();
 };
 
-const makeEncrypter = (): IEncrypter => {
+const mockEncrypter = (): IEncrypter => {
   class EncrypterStub implements IEncrypter {
     async encrypt(value: string): Promise<string> {
       return new Promise((resolve) => resolve('any_token'));
@@ -43,7 +43,7 @@ const makeEncrypter = (): IEncrypter => {
   return new EncrypterStub();
 };
 
-const makeUpdateAccessTokenRepository = (): IUpdateAccessTokenRepository => {
+const mockUpdateAccessTokenRepository = (): IUpdateAccessTokenRepository => {
   class UpdateAccessTokenRepositoryStub
     implements IUpdateAccessTokenRepository
   {
@@ -63,10 +63,10 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
-  const hashComparerStub = makeHashComparer();
-  const encrypterStub = makeEncrypter();
-  const updateAccessTokenRepositoryStub = makeUpdateAccessTokenRepository();
+  const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository();
+  const hashComparerStub = mockHashComparer();
+  const encrypterStub = mockEncrypter();
+  const updateAccessTokenRepositoryStub = mockUpdateAccessTokenRepository();
 
   const sut = new DbAuthentication(
     loadAccountByEmailRepositoryStub,
@@ -87,7 +87,7 @@ describe('DbAuthentication UseCase', () => {
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail');
-    await sut.auth(makeFakeAuthentication());
+    await sut.auth(mockAuthenticationParams());
     expect(loadSpy).toHaveBeenCalledWith('any_email@mail.com');
   });
 
@@ -98,7 +98,7 @@ describe('DbAuthentication UseCase', () => {
       .mockImplementationOnce(() => {
         throw new Error();
       });
-    const promise = sut.auth(makeFakeAuthentication());
+    const promise = sut.auth(mockAuthenticationParams());
     await expect(promise).rejects.toThrow();
   });
 
@@ -107,14 +107,14 @@ describe('DbAuthentication UseCase', () => {
     jest
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
       .mockReturnValueOnce(null);
-    const accessToken = await sut.auth(makeFakeAuthentication());
+    const accessToken = await sut.auth(mockAuthenticationParams());
     expect(accessToken).toBeNull();
   });
 
   test('Should call HashComparer with correct values', async () => {
     const { sut, hashComparerStub } = makeSut();
     const compareSpy = jest.spyOn(hashComparerStub, 'compare');
-    await sut.auth(makeFakeAuthentication());
+    await sut.auth(mockAuthenticationParams());
     expect(compareSpy).toHaveBeenCalledWith('any_password', 'hashed_password');
   });
 
@@ -123,7 +123,7 @@ describe('DbAuthentication UseCase', () => {
     jest.spyOn(hashComparerStub, 'compare').mockImplementationOnce(() => {
       throw new Error();
     });
-    const promise = sut.auth(makeFakeAuthentication());
+    const promise = sut.auth(mockAuthenticationParams());
     await expect(promise).rejects.toThrow();
   });
 
@@ -132,14 +132,14 @@ describe('DbAuthentication UseCase', () => {
     jest
       .spyOn(hashComparerStub, 'compare')
       .mockReturnValueOnce(new Promise((resolve) => resolve(false)));
-    const accessToken = await sut.auth(makeFakeAuthentication());
+    const accessToken = await sut.auth(mockAuthenticationParams());
     expect(accessToken).toBeNull();
   });
 
   test('Should call Encrypter with correct id', async () => {
     const { sut, encrypterStub } = makeSut();
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
-    await sut.auth(makeFakeAuthentication());
+    await sut.auth(mockAuthenticationParams());
     expect(encryptSpy).toHaveBeenCalledWith('any_id');
   });
 
@@ -148,13 +148,13 @@ describe('DbAuthentication UseCase', () => {
     jest.spyOn(encrypterStub, 'encrypt').mockImplementationOnce(() => {
       throw new Error();
     });
-    const promise = sut.auth(makeFakeAuthentication());
+    const promise = sut.auth(mockAuthenticationParams());
     await expect(promise).rejects.toThrow();
   });
 
   test('Should return a token on success', async () => {
     const { sut } = makeSut();
-    const accessToken = await sut.auth(makeFakeAuthentication());
+    const accessToken = await sut.auth(mockAuthenticationParams());
     expect(accessToken).toBe('any_token');
   });
 
@@ -164,7 +164,7 @@ describe('DbAuthentication UseCase', () => {
       updateAccessTokenRepositoryStub,
       'updateAccessToken'
     );
-    await sut.auth(makeFakeAuthentication());
+    await sut.auth(mockAuthenticationParams());
     expect(updateSpy).toHaveBeenCalledWith('any_id', 'any_token');
   });
 
@@ -175,7 +175,7 @@ describe('DbAuthentication UseCase', () => {
       .mockImplementationOnce(() => {
         throw new Error();
       });
-    const promise = sut.auth(makeFakeAuthentication());
+    const promise = sut.auth(mockAuthenticationParams());
     await expect(promise).rejects.toThrow();
   });
 });

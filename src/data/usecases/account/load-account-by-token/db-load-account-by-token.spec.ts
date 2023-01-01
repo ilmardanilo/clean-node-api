@@ -11,8 +11,8 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const decrypterStub = makeDecrypter();
-  const loadAccountByTokenRepositoryStub = makeLoadAccountByTokenRepository();
+  const decrypterStub = mockDecrypter();
+  const loadAccountByTokenRepositoryStub = mockLoadAccountByTokenRepository();
   const sut = new DbLoadAccountByToken(
     decrypterStub,
     loadAccountByTokenRepositoryStub
@@ -24,7 +24,7 @@ const makeSut = (): SutTypes => {
   };
 };
 
-const makeDecrypter = (): IDecrypter => {
+const mockDecrypter = (): IDecrypter => {
   class DecrypterStub implements IDecrypter {
     async decrypt(value: string): Promise<string> {
       return new Promise((resolve) => resolve('any_value'));
@@ -33,7 +33,7 @@ const makeDecrypter = (): IDecrypter => {
   return new DecrypterStub();
 };
 
-const makeLoadAccountByTokenRepository = (): ILoadAccountByTokenRepository => {
+const mockLoadAccountByTokenRepository = (): ILoadAccountByTokenRepository => {
   class LoadAccountByTokenRepositoryStub
     implements ILoadAccountByTokenRepository
   {

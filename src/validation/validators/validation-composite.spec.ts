@@ -7,7 +7,7 @@ type SutTypes = {
   validationStubs: IValidation[];
 };
 
-const makeValidation = (): IValidation => {
+const mockValidation = (): IValidation => {
   class ValidationStub implements IValidation {
     validate(input: any): Error {
       return null;
@@ -18,7 +18,7 @@ const makeValidation = (): IValidation => {
 };
 
 const makeSut = (): SutTypes => {
-  const validationStubs = [makeValidation(), makeValidation()];
+  const validationStubs = [mockValidation(), mockValidation()];
   const sut = new ValidationComposite(validationStubs);
   return {
     sut,

@@ -9,7 +9,7 @@ import { IEmailValidator } from '../../../../../validation/protocols/email-valid
 
 jest.mock('../../../../../validation/validators/validation-composite');
 
-const makeEmailValidator = (): IEmailValidator => {
+const mockEmailValidator = (): IEmailValidator => {
   class EmailValidatorStub implements IEmailValidator {
     isValid(email: string): boolean {
       return true;
@@ -26,7 +26,7 @@ describe('LoginValidation Factory', () => {
     for (const field of ['email', 'password']) {
       validations.push(new RequeredFieldValidation(field));
     }
-    validations.push(new EmailValidation('email', makeEmailValidator()));
+    validations.push(new EmailValidation('email', mockEmailValidator()));
     expect(ValidationComposite).toHaveBeenCalledWith(validations);
   });
 });

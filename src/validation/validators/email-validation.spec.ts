@@ -7,7 +7,7 @@ type SutTypes = {
   emailValidatorStub: IEmailValidator;
 };
 
-const makeEmailValidator = (): IEmailValidator => {
+const mockEmailValidator = (): IEmailValidator => {
   class EmailValidatorStub implements IEmailValidator {
     isValid(email: string): boolean {
       return true;
@@ -18,7 +18,7 @@ const makeEmailValidator = (): IEmailValidator => {
 };
 
 const makeSut = (): SutTypes => {
-  const emailValidatorStub = makeEmailValidator();
+  const emailValidatorStub = mockEmailValidator();
   const sut = new EmailValidation('email', emailValidatorStub);
 
   return {
