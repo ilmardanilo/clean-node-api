@@ -81,9 +81,9 @@ describe('DbLoadSurveys Usecase', () => {
     const { sut, loadSurveysRepositoryStub } = makeSut();
     jest
       .spyOn(loadSurveysRepositoryStub, 'loadAll')
-      .mockReturnValueOnce(
-        new Promise((resolve, reject) => reject(new Error()))
-      );
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
 
     const promise = sut.load();
     await expect(promise).rejects.toThrow();

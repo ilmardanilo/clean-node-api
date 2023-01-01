@@ -1,3 +1,4 @@
+import { mockAccountModel } from './../../domain/test';
 import { AuthMiddleware } from './auth-middleware';
 import {
   ILoadAccountByToken,
@@ -6,13 +7,6 @@ import {
 } from './auth-middleware-protocols';
 import { AccessDeniedError } from '../errors';
 import { forbidden, ok, serverError } from '../helpers/http/http-helper';
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'hashed_password',
-});
 
 const makeFakeRequest = (): HttpRequest => ({
   headers: {
@@ -23,7 +17,7 @@ const makeFakeRequest = (): HttpRequest => ({
 const makeLoadAccountByToken = (): ILoadAccountByToken => {
   class LoadAccountByTokenStub implements ILoadAccountByToken {
     async load(accessToken: string, role?: string): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(makeFakeAccount()));
+      return new Promise((resolve) => resolve(mockAccountModel()));
     }
   }
   return new LoadAccountByTokenStub();
@@ -79,6 +73,6 @@ describe('Auth Middleware', () => {
   test('Should return 200 if LoadAccountByToken returns an account', async () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual(ok({ accountId: 'valid_id' }));
+    expect(httpResponse).toEqual(ok({ accountId: 'any_id' }));
   });
 });

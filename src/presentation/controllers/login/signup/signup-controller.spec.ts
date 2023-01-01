@@ -1,3 +1,4 @@
+import { mockAccountModel } from './../../../../domain/test';
 import { forbidden } from './../../../helpers/http/http-helper';
 import { SignUpController } from './signup-controller';
 import {
@@ -32,17 +33,10 @@ const makeFakeRequest = (): HttpRequest => ({
   },
 });
 
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password',
-});
-
 const makeAddAccount = (): IAddAccount => {
   class AddAccountStub implements IAddAccount {
     async add(account: AddAccountParams): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(makeFakeAccount()));
+      return new Promise((resolve) => resolve(mockAccountModel()));
     }
   }
 
