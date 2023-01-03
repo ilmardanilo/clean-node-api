@@ -1,97 +1,57 @@
-import { LoadSurveysController } from './load-surveys-controller';
-import { ILoadSurveys, SurveyModel } from './load-survey-controller-protocols';
-import MockDate from 'mockdate';
-import { noContent, ok, serverError } from '../../../helpers/http/http-helper';
-
-const mockSurveysModel = (): SurveyModel[] => {
-  return [
-    {
-      id: 'any_id',
-      question: 'any_question',
-      answers: [
-        {
-          image: 'any_image',
-          answer: 'any_answer',
-        },
-      ],
-      date: new Date(),
-    },
-    {
-      id: 'other_id',
-      question: 'other_question',
-      answers: [
-        {
-          image: 'other_image',
-          answer: 'other_answer',
-        },
-      ],
-      date: new Date(),
-    },
-  ];
-};
+import { LoadSurveysController } from './load-surveys-controller'
+import { LoadSurveys } from './load-surveys-controller-protocols'
+import { ok, serverError, noContent } from '@/presentation/helpers/http/http-helper'
+import { mockLoadSurveys } from '@/presentation/test'
+import { throwError, mockSurveyModels } from '@/domain/test'
+import MockDate from 'mockdate'
 
 type SutTypes = {
-  sut: LoadSurveysController;
-  loadSurveysStub: ILoadSurveys;
-};
+  sut: LoadSurveysController
+  loadSurveysStub: LoadSurveys
+}
 
 const makeSut = (): SutTypes => {
-  const loadSurveysStub = mockLoadSurveys();
-  const sut = new LoadSurveysController(loadSurveysStub);
-
+  const loadSurveysStub = mockLoadSurveys()
+  const sut = new LoadSurveysController(loadSurveysStub)
   return {
     sut,
-    loadSurveysStub,
-  };
-};
-
-const mockLoadSurveys = (): ILoadSurveys => {
-  class LoadSurveysStub implements ILoadSurveys {
-    async load(): Promise<SurveyModel[]> {
-      return Promise.resolve(mockSurveysModel());
-    }
+    loadSurveysStub
   }
-  return new LoadSurveysStub();
-};
+}
 
 describe('LoadSurveys Controller', () => {
   beforeAll(() => {
-    MockDate.set(new Date());
-  });
+    MockDate.set(new Date())
+  })
 
   afterAll(() => {
-    MockDate.reset();
-  });
+    MockDate.reset()
+  })
 
   test('Should call LoadSurveys', async () => {
-    const { sut, loadSurveysStub } = makeSut();
-    const loadSpy = jest.spyOn(loadSurveysStub, 'load');
-    await sut.handle({});
-    expect(loadSpy).toHaveBeenCalled();
-  });
+    const { sut, loadSurveysStub } = makeSut()
+    const loadSpy = jest.spyOn(loadSurveysStub, 'load')
+    await sut.handle({})
+    expect(loadSpy).toHaveBeenCalled()
+  })
 
   test('Should return 200 on success', async () => {
-    const { sut } = makeSut();
-    const httpResponse = await sut.handle({});
-    expect(httpResponse).toEqual(ok(mockSurveysModel()));
-  });
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(ok(mockSurveyModels()))
+  })
 
   test('Should return 204 if LoadSurveys returns empty', async () => {
-    const { sut, loadSurveysStub } = makeSut();
-    jest
-      .spyOn(loadSurveysStub, 'load')
-      .mockReturnValueOnce(Promise.resolve([]));
-    const httpResponse = await sut.handle({});
-    expect(httpResponse).toEqual(noContent());
-  });
+    const { sut, loadSurveysStub } = makeSut()
+    jest.spyOn(loadSurveysStub, 'load').mockReturnValueOnce(Promise.resolve([]))
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(noContent())
+  })
 
   test('Should return 500 if LoadSurveys throws', async () => {
-    const { sut, loadSurveysStub } = makeSut();
-    jest.spyOn(loadSurveysStub, 'load').mockImplementationOnce(() => {
-      throw new Error();
-    });
-
-    const httpResponse = await sut.handle({});
-    expect(httpResponse).toEqual(serverError(new Error()));
-  });
-});
+    const { sut, loadSurveysStub } = makeSut()
+    jest.spyOn(loadSurveysStub, 'load').mockImplementationOnce(throwError)
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(serverError(new Error()))
+  })
+})

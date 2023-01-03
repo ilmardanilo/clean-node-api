@@ -1,12 +1,12 @@
-import { MissingParamError } from '../../presentation/errors';
-import { IValidation } from '../../presentation/protocols';
+import { Validation } from '@/presentation/protocols'
+import { MissingParamError } from '@/presentation/errors'
 
-export class RequeredFieldValidation implements IValidation {
-  constructor(private readonly fieldName: string) {}
+export class RequiredFieldValidation implements Validation {
+  constructor (private readonly fieldName: string) {}
 
-  validate(input: any): Error {
+  validate (input: any): Error {
     if (!input[this.fieldName]) {
-      return new MissingParamError(this.fieldName);
+      return new MissingParamError(this.fieldName)
     }
   }
 }

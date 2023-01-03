@@ -1,32 +1,27 @@
-import { makeLoginValidation } from './login-validation-factory';
-import {
-  EmailValidation,
-  ValidationComposite,
-  RequeredFieldValidation,
-} from '../../../../../validation/validators';
-import { IValidation } from '../../../../../presentation/protocols';
-import { IEmailValidator } from '../../../../../validation/protocols/email-validator';
+import { makeLoginValidation } from './login-validation-factory'
+import { ValidationComposite, RequiredFieldValidation, EmailValidation } from '@/validation/validators'
+import { EmailValidator } from '@/validation/protocols/email-validator'
+import { Validation } from '@/presentation/protocols/validation'
 
-jest.mock('../../../../../validation/validators/validation-composite');
+jest.mock('@/validation/validators/validation-composite')
 
-const mockEmailValidator = (): IEmailValidator => {
-  class EmailValidatorStub implements IEmailValidator {
-    isValid(email: string): boolean {
-      return true;
+const makeEmailValidator = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid (email: string): boolean {
+      return true
     }
   }
-
-  return new EmailValidatorStub();
-};
+  return new EmailValidatorStub()
+}
 
 describe('LoginValidation Factory', () => {
   test('Should call ValidationComposite with all validations', () => {
-    makeLoginValidation();
-    const validations: IValidation[] = [];
+    makeLoginValidation()
+    const validations: Validation[] = []
     for (const field of ['email', 'password']) {
-      validations.push(new RequeredFieldValidation(field));
+      validations.push(new RequiredFieldValidation(field))
     }
-    validations.push(new EmailValidation('email', mockEmailValidator()));
-    expect(ValidationComposite).toHaveBeenCalledWith(validations);
-  });
-});
+    validations.push(new EmailValidation('email', makeEmailValidator()))
+    expect(ValidationComposite).toHaveBeenCalledWith(validations)
+  })
+})

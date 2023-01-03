@@ -1,13 +1,10 @@
-import {
-  ILoadSurveys,
-  SurveyModel,
-  ILoadSurveysRepository,
-} from './db-load-surveys-protocols';
+import { LoadSurveysRepository, LoadSurveys, SurveyModel } from './db-load-surveys-protocols'
 
-export class DbLoadSurveys implements ILoadSurveys {
-  constructor(private readonly loadSurveysRepository: ILoadSurveysRepository) {}
-  async load(): Promise<SurveyModel[]> {
-    const surveys = await this.loadSurveysRepository.loadAll();
-    return surveys;
+export class DbLoadSurveys implements LoadSurveys {
+  constructor (private readonly loadSurveysRepository: LoadSurveysRepository) {}
+
+  async load (): Promise<SurveyModel[]> {
+    const surveys = await this.loadSurveysRepository.loadAll()
+    return surveys
   }
 }

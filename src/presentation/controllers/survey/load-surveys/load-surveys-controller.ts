@@ -1,23 +1,15 @@
-import { noContent, ok, serverError } from '../../../helpers/http/http-helper';
-import {
-  IController,
-  HttpRequest,
-  HttpResponse,
-  ILoadSurveys,
-} from './load-survey-controller-protocols';
+import { Controller, HttpRequest, HttpResponse, LoadSurveys } from './load-surveys-controller-protocols'
+import { ok, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 
-export class LoadSurveysController implements IController {
-  constructor(private readonly loadSurveys: ILoadSurveys) {}
+export class LoadSurveysController implements Controller {
+  constructor (private readonly loadSurveys: LoadSurveys) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const surveys = await this.loadSurveys.load();
-      if (!surveys.length) {
-        return noContent();
-      }
-      return ok(surveys);
+      const surveys = await this.loadSurveys.load()
+      return surveys.length ? ok(surveys) : noContent()
     } catch (error) {
-      return serverError(error);
+      return serverError(error)
     }
   }
 }
