@@ -16,13 +16,16 @@ const makeAccessToken = async (): Promise<string> => {
   })
   const id = res.ops[0]._id
   const accessToken = sign({ id }, env.jwtSecret)
-  await accountCollection.updateOne({
-    _id: id
-  }, {
-    $set: {
-      accessToken
+  await accountCollection.updateOne(
+    {
+      _id: id
+    },
+    {
+      $set: {
+        accessToken
+      }
     }
-  })
+  )
   return accessToken
 }
 
@@ -56,12 +59,15 @@ describe('Survey Routes', () => {
       const accessToken = await makeAccessToken()
       const res = await surveyCollection.insertOne({
         question: 'Question',
-        answers: [{
-          answer: 'Answer 1',
-          image: 'http://image-name.com'
-        }, {
-          answer: 'Answer 2'
-        }],
+        answers: [
+          {
+            answer: 'Answer 1',
+            image: 'http://image-name.com'
+          },
+          {
+            answer: 'Answer 2'
+          }
+        ],
         date: new Date()
       })
       await request(app)
@@ -71,6 +77,12 @@ describe('Survey Routes', () => {
           answer: 'Answer 1'
         })
         .expect(200)
+    })
+  })
+
+  describe('GET /surveys/:surveyId/results', () => {
+    test('Should return 403 on load survey result without accessToken', async () => {
+      await request(app).get('/api/surveys/any_id/results').expect(403)
     })
   })
 })
